@@ -58,17 +58,57 @@ body {
   }
 
 .main {
-    display: flex;
+    /* display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    height: 300px;
+    height: 300px; */
+
     border-radius: 0px 0px 40px 40px;
+
+    color: white;
   }
 
+.main__buscador {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 300px;
+}
+
 .main__title {
+  font-size: 24px;
+}
+.main__results {
+  display: none;
+
+  font-size: 14px;
+  align-self: flex-start;
+
+  padding: 30px;
+}
+.main__results--active {
+  display: block;
+}
+
+#buscador {
+  width: 70%;
+}
+#buscador .input {
+    border: 2px solid white;
+    border-radius: 30px;
     color: white;
-    font-size: 24px;
+    background-color: rgba(255, 255, 255, 0.1);
+    font-family: 'Muli', sans-serif;
+    font-size: 16px;
+    height: 50px;
+    padding: 0px 20px;
+    width: 100%;
+    outline: none;
+  }
+::placeholder {
+    color: white;
   }
 
 .categories__title {
@@ -88,7 +128,7 @@ body {
 }
 .carousel__container {
     white-space: nowrap;
-    margin: 70px 0px;
+    margin: 55px 0px;
     padding-bottom: 10px;
 
 }
@@ -161,21 +201,7 @@ body {
     margin: 3px 0px;
 }
 
-.input {
-    border: 2px solid white;
-    border-radius: 30px;
-    color: white;
-    background-color: rgba(255, 255, 255, 0.1);
-    font-family: 'Muli', sans-serif;
-    font-size: 16px;
-    height: 50px;
-    padding: 0px 20px;
-    width: 70%;
-    outline: none;
-  }
-::placeholder {
-    color: white;
-  }
+
 
 .login {
       background: linear-gradient(#21C08B, #AB88FF);
@@ -280,6 +306,34 @@ body {
 .footer a:hover {
     text-decoration: underline;
 }
+
+.overlay {
+  display: none;
+
+  background: rgba(0,0,0,.5);
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  /* display: flex; */
+  /* align-items: center;
+  justify-content: center; */
+}
+.overlay.active {
+  display: flex;
+}
+
+.fadeIn {
+  animation-name: fadeIn;
+  animation-duration: 1s;
+}
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+
 
 @media only screen and (max-width: 600px) {
     .login__container {
