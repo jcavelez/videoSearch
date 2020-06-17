@@ -4,6 +4,7 @@ const $resultsCarousel = document.getElementById('resultsCarousel')
 
 
 
+
 //Cuando al formulario se le de enter se le quita el comportamiento por defecto
 //que viene con el elemento que es recargar la página
 //luego se activa el carrusel de resultlados

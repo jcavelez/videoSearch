@@ -7,6 +7,7 @@ const GENRES = {
               history: 'Historia',
               thriller: 'Suspenso',
               }
+// Caché list: comedyCacheList, actionCacheList, historyCacheList, thrillerCacheList
 
 const $listsContainer = document.getElementById('lists')
 const $overlay = document.getElementById('overlay')
@@ -49,24 +50,38 @@ for (let genre in GENRES)
     async function getMovies(genre)
     {
       let movies
-      try {
-        const response = await fetch(`${API_URL}genre=${genre}`)
-        movies = await response.json()
-        console.log(`Llegaron las pelis de ${genre} por async await`, movies.data)
-        return movies.data.movies
-      } catch (e) {
-        console.log(e)
-        movies = [{id: 'undefined', title: 'Not found', medium_cover_image: './assets/img/404-error-page-not-found-miss-paper-with-white-vector.jpg'}]
-        return movies
-      } finally {
+      const listName = `${genre}CacheList`
+      let cacheList = sessionStorage.getItem(listName)
 
+      if (cacheList)
+      {
+        console.log('Hay caché');
+        return JSON.parse(cacheList)
       }
+      else
+      {
+        try
+        {
+          const response = await fetch(`${API_URL}genre=${genre}`)
+          movies = await response.json()
+          console.log(`Llegaron las pelis de ${genre} por async await`, movies.data)
+          cacheList = movies.data.movies
+          sessionStorage.setItem(listName, JSON.stringify(cacheList))
+          return cacheList
+        } catch (e)
+        {
+          console.log(e)
+          movies = [{id: 'undefined', title: 'Not found', medium_cover_image: './assets/img/404-error-page-not-found-miss-paper-with-white-vector.jpg'}]
+          return movies
+        }
+      }
+
     }
 
     const MOVIES = await getMovies(genre)
+    console.log(MOVIES);
     const $carousel = document.getElementById(genre+'-list')
     $carousel.children[0].remove()
-    //console.log(MOVIES)
     MOVIES.forEach((movie) => {
       let movieElement
       const templateItem = `
