@@ -59,7 +59,7 @@ async function getData(API)
 {
   const response = await fetch(`${API}`)
   const movies = await response.json()
-  console.log(`Llegaron las pelis de la búsqueda`, movies.data.movies)
+  //console.log(`Llegaron las pelis de la búsqueda`, movies.data.movies)
   return movies.data.movies
 }
 
@@ -71,6 +71,18 @@ async function getMovieDetails(API)
   return movies.data.movie
 }
 
+function createCarouselTemplate(id)
+{
+  return `
+
+    <section class="carousel">
+      <div class="carousel__container" id="${id}-list">
+        <img src="assets/img/loader.gif" width="50" height="50" alt="">
+      </div>
+    </section>
+    `
+  //
+}
 
 function createCarouselItemTemplate(movie)
 {
@@ -93,11 +105,28 @@ function insertHTML($selector, template)
 {
   const html = document.implementation.createHTMLDocument()
   html.body.innerHTML = template
-  movieElement = html.body.children[0]
-  $selector.append(movieElement)
-  const imageMovieElement = movieElement.querySelector('.carousel-item__img')
-  imageMovieElement.addEventListener('load', () => { imageMovieElement.classList.add('fadeIn')} )
-  movieElement.addEventListener('click', () => { showModal(parseInt(movieElement.dataset.id, 10)) })
+  const templateInHTML = html.body.children[0]
+  $selector.append(templateInHTML)
+  const $imageMovieElement = templateInHTML.querySelector('.carousel-item__img')
+  $imageMovieElement.addEventListener('load', () => { $imageMovieElement.classList.add('fadeIn')} )
+  templateInHTML.addEventListener('click', () => { showModal(parseInt(templateInHTML.dataset.id, 10)) })
+}
+
+function prependHTML($selector, template)
+{
+  const html = document.implementation.createHTMLDocument()
+  html.body.innerHTML = template
+  const templateInHTML = html.body.children[0]
+  $selector.prepend(templateInHTML)
+}
+
+function appendHTML($selector, template)
+{
+  const html = document.implementation.createHTMLDocument()
+  html.body.innerHTML = template
+  const templateInHTML = html.body.children[0]
+  $selector.append(templateInHTML)
+
 }
 
 function emptyHTMLCollection($HTMLCollection)
@@ -105,6 +134,13 @@ function emptyHTMLCollection($HTMLCollection)
   let sizeHTMLCollection = $HTMLCollection.children.length
   for (let i = 0; i < sizeHTMLCollection; i++)
   {
-    $resultsCarousel.children[0].remove()
+    $HTMLCollection.children[0].remove()
   }
+}
+
+function addItemEvents($movieItem)
+{
+  const $imageMovieItemt = $movieItem.querySelector('.carousel-item__img')
+  $imageMovieItem.addEventListener('load', () => { $imageMovieItem.classList.add('fadeIn')} )
+  $movieItem.addEventListener('click', () => { showModal(parseInt($movieItem.dataset.id, 10)) })
 }

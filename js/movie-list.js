@@ -8,11 +8,15 @@ const GENRES = {
               thriller: 'Suspenso',
               }
 // Caché list: comedyCacheList, actionCacheList, historyCacheList, thrillerCacheList
+//Lista de recomendaciones
+let recommendationsList
 
 const $listsContainer = document.getElementById('lists')
 const $overlay = document.getElementById('overlay')
 const $modal = document.getElementById('modal')
 
+const MAX_RECOMMENDATIONS = 4
+let recommendationBuffer = localStorage.length
 
 //Render de carrouseles
 for (let genre in GENRES)
@@ -32,11 +36,9 @@ for (let genre in GENRES)
   //crea una variable tipo documento html
   let html = document.implementation.createHTMLDocument()
   //agrega los template de lista de generos carrusel
-  //console.log(templateTitles)
   html.body.innerHTML = templateTitles
   //agregar el temprate al final del elemento con id 'list'
   $listsContainer.append(html.body.children[0])
-  //console.log(templateCarousel)
   html.body.innerHTML = templateCarousel
   $listsContainer.append(html.body.children[0])
 
@@ -102,8 +104,8 @@ for (let genre in GENRES)
       html.body.innerHTML = templateItem
       movieElement = html.body.children[0]
       $carousel.append(movieElement)
-      const imageMovieElement = movieElement.querySelector('.carousel-item__img')
-      imageMovieElement.addEventListener('load', () => { imageMovieElement.classList.add('fadeIn')} )
+      const $imageMovieElement = movieElement.querySelector('.carousel-item__img')
+      $imageMovieElement.addEventListener('load', () => { $imageMovieElement.classList.add('fadeIn')} )
       movieElement.addEventListener('click', () => { showModal(parseInt(movieElement.dataset.id, 10)) })
     })
   }
@@ -116,12 +118,14 @@ async function showModal(movieId)
   $overlay.classList.add('active');
 
   console.log(`Vamos a mostrar la pelicula ID ${movieId}`)
+
   const $modalContent = document.querySelector('.modal-content')
   let movieData
   let movieElement
 
-
   movieData = await getMovieDetails(`${MOVIE_DETAILS_URL}movie_id=${movieId}`)
+
+  //Guardo ID en el localStorage para crear recomendaciones personalizas
 
   const movieModalTemplate = createModalTemplate(movieData)
   const movieHTMLCollection = document.implementation.createHTMLDocument()
@@ -141,6 +145,11 @@ async function showModal(movieId)
   const $closeModal = document.getElementById('closeModal')
   $closeModal.addEventListener('click', hideModal)
   $overlay.addEventListener('click', hideModal)
+
+  //guardamos en el localstorage el id de la peli para después crear
+  //recomendaciones basados en estos ids
+  recommendationBuffer = recommendationBuffer < MAX_RECOMMENDATIONS ? recommendationBuffer+1 : 1
+  localStorage.setItem(`rec${recommendationBuffer}`, movieId)
 }
 
 function hideModal() {
