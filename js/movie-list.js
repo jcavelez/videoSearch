@@ -15,7 +15,7 @@ const $listsContainer = document.getElementById('lists')
 const $overlay = document.getElementById('overlay')
 const $modal = document.getElementById('modal')
 
-const MAX_RECOMMENDATIONS = 4
+const MAX_RECOMMENDATIONS = 3
 let recommendationBuffer = localStorage.length
 
 //Render de carrouseles

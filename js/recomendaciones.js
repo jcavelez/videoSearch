@@ -27,7 +27,6 @@ if(recommendationBuffer > 0)
         for (let i = 1; i <= recommendationBuffer; i++)
         {
           const recommendedId = localStorage[`rec${i}`]
-          debugger
           const movies = await getData(`${RECOMMENDATIONS_URL}movie_id=${recommendedId}`)
           recommendedMovies = recommendedMovies.concat(movies)
         }
